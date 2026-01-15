@@ -1,0 +1,96 @@
+/* Basic body styling */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
+    margin: 0;
+    flex-direction: column;
+}
+
+.container {
+    text-align: center;
+}
+
+/* Server name */
+h1 {
+    margin-bottom: 40px;
+    color: #2c3e50;
+}
+
+/* Circle with green light */
+.status-circle-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px auto;
+}
+
+.status-circle {
+    width: 80px;
+    height: 80px;
+    background: #27ae60;
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.green-light {
+    width: 20px;
+    height: 20px;
+    background: limegreen;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #27ae60;
+}
+
+/* Animated waves around circle */
+.waves {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120px;
+    height: 120px;
+    margin-left: -60px;
+    margin-top: -60px;
+    border-radius: 50%;
+    z-index: 1;
+    animation: wave 2s infinite;
+    box-shadow: 0 0 0 rgba(39, 174, 96, 0.4);
+}
+
+@keyframes wave {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4);
+    }
+    50% {
+        transform: scale(1.2);
+        box-shadow: 0 0 20px 20px rgba(39, 174, 96, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4);
+    }
+}
+
+/* Uptime text */
+#uptime {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #34495e;
+}
+
+/* Status text */
+#status-text {
+    font-size: 16px;
+    color: #27ae60;
+    margin-top: 5px;
+    font-weight: bold;
+}
