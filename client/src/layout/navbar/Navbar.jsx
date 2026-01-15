@@ -6,9 +6,13 @@ export default function Navbar() {
     <nav className="w-full bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <div className="text-xl font-bold text-blue-600">
-          <Link to="/">CVD Risk Predictor</Link>
-        </div>
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-xl font-bold text-blue-600 hover:text-blue-700 transition"
+        >
+          <span className="text-2xl">🫀</span>
+          <span>CVD Risk Predictor</span>
+        </Link>
 
         {/* Navigation */}
         <ul className="flex gap-8 text-gray-700 font-medium">
