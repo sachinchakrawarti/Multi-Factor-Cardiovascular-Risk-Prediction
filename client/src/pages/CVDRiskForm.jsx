@@ -1,80 +1,144 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
-export default function CVDRiskForm() {
-  const [formData, setFormData] = useState({});
+const CVDRiskForm = () => {
+  const [formData, setFormData] = useState({
+    Chest_Pain: 0,
+    Shortness_of_Breath: 0,
+    Fatigue: 0,
+    Palpitations: 0,
+    Dizziness: 0,
+    Swelling: 0,
+    Pain_Arms_Jaw_Back: 0,
+    Cold_Sweats_Nausea: 0,
+    High_BP: 0,
+    High_Cholesterol: 0,
+    Diabetes: 0,
+    Smoking: 0,
+    Obesity: 0,
+    Sedentary_Lifestyle: 0,
+    Family_History: 0,
+    Chronic_Stress: 0,
+    Gender: 1, // 1 = Male, 0 = Female
+    Age: 50,
+  });
 
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // Handle input changes
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: name === "Age" ? parseFloat(value) : parseInt(value),
+    });
   };
 
-  const handleSubmit = (e) => {
+  // Submit form to API
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    setLoading(true);
+    setResult(null);
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/logistic/predict/patient",
+        formData
+      );
+      setResult(response.data);
+    } catch (error) {
+      console.error("API error:", error);
+      setResult({ error: "Failed to get prediction. Check API server." });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Risk color for progress bar
+  const getRiskColor = (prob) => {
+    if (prob < 0.3) return "green";
+    if (prob < 0.7) return "orange";
+    return "red";
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-2xl bg-gray-800 p-6 rounded-2xl shadow-lg space-y-4"
-      >
-        <h1 className="text-2xl font-bold text-center text-green-400">
-          Multi-Factor Cardiovascular Risk Prediction
-        </h1>
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-6">
+      <h2 className="text-2xl font-bold mb-4">
+        Cardiovascular Risk Prediction
+      </h2>
 
-        {/* Dropdowns */}
-        {[
-          "General_Health",
-          "Checkup",
-          "Exercise",
-          "Sex",
-          "Age_Category",
-          "Smoking_History",
-          "Skin_Cancer",
-          "Other_Cancer",
-          "Depression",
-          "Diabetes",
-          "Arthritis",
-        ].map((field) => (
-          <select
-            key={field}
-            name={field}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-700 border border-gray-600"
-          >
-            <option value="">{field.replaceAll("_", " ")}</option>
-            <option>Yes</option>
-            <option>No</option>
-          </select>
-        ))}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Binary & Gender Inputs */}
+        {Object.keys(formData)
+          .filter((key) => key !== "Age")
+          .map((key) => (
+            <div key={key} className="flex justify-between items-center">
+              <label className="capitalize">{key.replace(/_/g, " ")}</label>
+              <select
+                name={key}
+                value={formData[key]}
+                onChange={handleChange}
+                className="border rounded p-1"
+              >
+                <option value={0}>No</option>
+                <option value={1}>Yes</option>
+              </select>
+            </div>
+          ))}
 
-        {/* Numeric Inputs */}
-        {[
-          "Height_cm",
-          "Weight_kg",
-          "BMI",
-          "Alcohol_Consumption",
-          "Fruit_Consumption",
-          "Green_Vegetables_Consumption",
-          "FriedPotato_Consumption",
-        ].map((field) => (
+        {/* Age Input */}
+        <div className="flex justify-between items-center">
+          <label>Age</label>
           <input
-            key={field}
             type="number"
-            name={field}
-            placeholder={field.replaceAll("_", " ")}
+            name="Age"
+            value={formData.Age}
             onChange={handleChange}
-            className="w-full p-2 rounded bg-gray-700 border border-gray-600"
+            min={0}
+            max={120}
+            className="border rounded p-1 w-20"
           />
-        ))}
+        </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-green-500 hover:bg-green-600 p-2 rounded font-semibold"
+          className="bg-blue-600 text-white px-4 py-2 rounded"
         >
-          Predict Risk
+          {loading ? "Predicting..." : "Predict Risk"}
         </button>
       </form>
+
+      {/* Prediction Result */}
+      {result && (
+        <div className="mt-6 p-4 rounded border-l-4 border-orange-400 bg-orange-50">
+          {result.error ? (
+            <p className="text-red-600">{result.error}</p>
+          ) : (
+            <>
+              <p>
+                <strong>Predicted Class:</strong> {result.predicted_class} (
+                {result.risk_band})
+              </p>
+              <p>
+                <strong>Probability:</strong> {result.predicted_probability}
+              </p>
+              <div className="w-full bg-gray-200 rounded h-4 mt-2">
+                <div
+                  className="h-4 rounded"
+                  style={{
+                    width: `${(result.predicted_probability || 0) * 100}%`,
+                    backgroundColor: getRiskColor(result.predicted_probability),
+                  }}
+                ></div>
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default CVDRiskForm;
