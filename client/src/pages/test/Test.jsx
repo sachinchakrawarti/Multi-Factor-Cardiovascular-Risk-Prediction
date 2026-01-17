@@ -6,7 +6,7 @@ const Test = () => {
   const [result, setResult] = useState(null);
 
   return (
-    <div className="max-w-6xl mx-auto mt-6">
+    <div className="max-w-6xl mx-auto mt-6 mb-6">
       <div className="flex space-x-6 h-[calc(100vh-100px)]">
         {/* Left: Form - Fixed height container */}
         <div className="flex-1">
