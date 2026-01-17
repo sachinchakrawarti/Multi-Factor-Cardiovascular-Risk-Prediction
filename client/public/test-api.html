@@ -1,0 +1,38 @@
+<!-- client/public/test-api.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>API Connection Test</h1>
+    <button onclick="testAPI()">Test Connection</button>
+    <div id="result"></div>
+    
+    <script>
+    async function testAPI() {
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = 'Testing...';
+        
+        try {
+            // Test 1: Direct fetch
+            const response = await fetch('http://localhost:8000/health');
+            const data = await response.json();
+            resultDiv.innerHTML = `
+                <h3>✅ Backend is running!</h3>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+        } catch (error) {
+            resultDiv.innerHTML = `
+                <h3>❌ Error connecting to backend</h3>
+                <p>${error.message}</p>
+                <p>Make sure backend is running on http://localhost:8000</p>
+            `;
+        }
+    }
+    
+    // Auto-test on load
+    window.onload = testAPI;
+    </script>
+</body>
+</html>

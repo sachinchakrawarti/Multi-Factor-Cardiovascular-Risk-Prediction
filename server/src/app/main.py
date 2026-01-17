@@ -1,51 +1,27 @@
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
-from src.api.central_api import router as central_router
+import uvicorn
+import sys
 from pathlib import Path
 
-# --------------------------------------------------
-# Base directories
-# --------------------------------------------------
-BASE_DIR = Path(__file__).resolve().parent.parent  # server folder
-PUBLIC_DIR = BASE_DIR / "public"                   # React build folder
+# Add the server/src directory to Python path
+BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.append(str(BASE_DIR))
 
-# --------------------------------------------------
-# FastAPI instance
-# --------------------------------------------------
-app = FastAPI(
-    title="Multi-Factor Cardiovascular Risk Prediction API",
-    version="1.0.0"
-)
+from api.central_api import app
 
-# --------------------------------------------------
-# CORS (for React frontend)
-# --------------------------------------------------
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],   # Allow all origins for dev; restrict in production
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
-)
-
-# --------------------------------------------------
-# Serve React frontend
-# --------------------------------------------------
-if not PUBLIC_DIR.exists():
-    raise RuntimeError(f"Directory {PUBLIC_DIR} does not exist! Build React app first.")
-
-app.mount("/public", StaticFiles(directory=PUBLIC_DIR), name="public")
-
-@app.get("/")
-def home():
-    """
-    Serve index.html of React frontend
-    """
-    return FileResponse(PUBLIC_DIR / "index.html")
-
-# --------------------------------------------------
-# Include API router
-# --------------------------------------------------
-app.include_router(central_router)
+if __name__ == "__main__":
+    print("Starting Heart Disease Prediction API...")
+    print(f"Base directory: {BASE_DIR}")
+    print("Available endpoints:")
+    print("  - http://localhost:8000/")
+    print("  - http://localhost:8000/docs")
+    print("  - http://localhost:8000/health")
+    print("  - http://localhost:8000/features")
+    print("  - http://localhost:8000/logistic-regression/predict")
+    print("  - http://localhost:8000/random-forest/predict")
+    
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=8000,
+        reload=True  # Enable auto-reload during development
+    )
