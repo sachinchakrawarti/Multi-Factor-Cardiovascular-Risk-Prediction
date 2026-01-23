@@ -1,5 +1,3 @@
-server\src\api\core\feature_schema.py
-
 
 server\src\api\logistic_regression_model_api\logistic_regression_predict.py
 server\src\api\logistic_regression_model_api\logistic_regression_metrics.py
@@ -7,12 +5,44 @@ server\src\api\logistic_regression_model_api\logistic_regression_metrics.py
 server\src\api\random_forest_model_api\random_forest_predict.py
 server\src\api\random_forest_model_api\random_forest_metrics.py
 
+
+
+
 server\src\api\central_api.py
 
 
+# Api folder
+
+server\src\api\decision_tree_model_api
+
+server\src\api\logistic_regression_model_api
+
+
+server\src\api\random_forest_model_api
+
+server\src\api\svm_model_api
+
+server\src\api\ann_model_api
+
+
+server\src\api\hybrid_model_lr_rf_ann_api
+
+server\src\api\compare_models_api
+
+# models
+
 server\src\model\logistic_regression_model\logistic_model.pkl
 server\src\model\logistic_regression_model\scaler.pkl
+
 server\src\model\random_forest_model\random_forest_heart_risk.pkl
 
+server\src\model\decision_tree_model\decision_tree_heart_risk_model.pkl
+
+server\src\model\svm_model\svm_heart_risk_model.pkl
+
+server\src\model\ann_model\ann_heart_risk_model.pkl
+
+server\src\model\hybrid_model_lr_rf_ann\hybrid_heart_risk_model.pkl
+server\src\model\hybrid_model_lr_rf_ann\hybrid_scaler.pkl
 
 server\src\app\main.py

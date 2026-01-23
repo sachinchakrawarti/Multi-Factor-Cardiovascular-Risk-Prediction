@@ -1,3 +1,5 @@
+# server\src\api\logistic_regression_model_api\logistic_regression_predict.py
+
 from fastapi import APIRouter, HTTPException
 import joblib
 import numpy as np
