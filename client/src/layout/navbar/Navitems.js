@@ -1,10 +1,19 @@
-// Navitems.js
 const NavItems = [
-  { name: "Models", path: "/models" },
+  {
+    name: "Models",
+    path: "/models",
+    children: [
+      { name: "SVM", path: "/models/svm" },
+      { name: "Random Forest", path: "/models/random-forest" },
+      { name: "KNN", path: "/models/knn" },
+      { name: "Naive Bayes", path: "/models/naive-bayes" },
+      { name: "Neural Network", path: "/models/neural-network" },
+    ],
+  },
   { name: "Test", path: "/test" },
-  { name: "Login", path: "/login" }, // Added login to navigation items
-  { name: "Register", path: "/register" }, // Optional: Add register link
-  { name: "Dashboard", path: "/dashboard" }, // Optional: Add for logged-in users
+  { name: "Login", path: "/login" },
+  { name: "Register", path: "/register" },
+  { name: "Dashboard", path: "/dashboard" },
 ];
 
 export default NavItems;
